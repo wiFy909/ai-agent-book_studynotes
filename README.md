@@ -120,7 +120,7 @@ git clone https://github.com/joonspk-research/generative_agents.git    chapter10
 ## 🔁 学习与提交方法
 
 <div align="center">
-  <img src="assets/studynotes/study-loop.svg" alt="精读、实践、对照、标记、提交的学习循环" width="100%">
+  <img src="assets/studynotes/study-loop.svg" alt="精读、实践、对照、标记、提交形成的五角学习闭环" width="100%">
 </div>
 
 每次学习提交遵循同一条最小闭环：
@@ -143,7 +143,7 @@ git clone https://github.com/joonspk-research/generative_agents.git    chapter10
 | 章节 | 第 1 / 10 章，进行中；尚不代表第 1 章已完成 | [第 1 章正文](book/chapter1.md) |
 | 已记录主题 | 7 组：工具设计、Harness、学习机制、上下文组成、ReAct、Harness 方法论、ACI | [打开学习笔记](studydocs.md) |
 | 代码实践 | 尚未在本次提交中形成新的实验验收记录 | [第 1 章实验目录](chapter1/README.md) |
-| 本轮记录 | README 学习入口与标记体系建立，既有笔记首次纳入仓库 | [查看 `studydocs.md`](studydocs.md) |
+| 本轮记录 | 学习进度未前移；完成 GitHub 原生笔记结构、个人实践时间线和五角学习闭环重构 | [查看 `studydocs.md`](studydocs.md) |
 
 ### 本阶段心得
 
@@ -156,6 +156,7 @@ git clone https://github.com/joonspk-research/generative_agents.git    chapter10
 
 | 日期 | 阶段 | 本次变化 | 心得文件 |
 | --- | --- | --- | --- |
+| 2026-07-30 | 第 1 章进行中 | 学习内容未前移；将笔记改为 GitHub 原生的“原文—来源—心得”结构；把 2022—2026 个人实践改为连续时间线，并将当前 Agent 架构独立展示；把学习流程改为顺时针五角闭环 | [`studydocs.md`](studydocs.md) |
 | 2026-07-30 | 第 1 章进行中 | 建立精读 fork 首页；整理 7 组主题；补充 RL、神经网络与工具调用的边界说明；同步上游最新的 94 个实验、10 种语言和 20 个外部仓库信息 | [`studydocs.md`](studydocs.md) |
 
 ## 🏷️ 笔记标记
