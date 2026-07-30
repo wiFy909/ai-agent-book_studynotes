@@ -28,7 +28,10 @@
 
 > **Agent = LLM + 上下文 + 工具**
 
-原作不是只介绍某个框架或一组零散技巧，而是沿着 **Agent 基础 → 上下文工程 → 记忆与知识库 → 工具 → Coding Agent → 评估 → 模型后训练 → 持续进化 → 多模态 → 多 Agent 协作** 的主线，组织了 10 章正文和 93 个配套实验。
+原作不是只介绍某个框架或一组零散技巧，而是沿着 **Agent 基础 → 上下文工程 → 记忆与知识库 → 工具 → Coding Agent → 评估 → 模型后训练 → 持续进化 → 多模态 → 多 Agent 协作** 的主线，组织了 10 章正文和 94 个配套实验。
+
+| 📚 10 章系统正文 | 🧪 94 个配套实验 | 🌐 10 种语言 |
+| :---: | :---: | :---: |
 
 | 系统维度 | 原作覆盖的关键问题 | 学习价值 |
 | --- | --- | --- |
@@ -61,7 +64,7 @@
 <details>
 <summary><b>上游外部实验仓库获取清单</b></summary>
 
-第 6、7、9、10 章有 19 个因体积或版权原因未内置的外部仓库。以下命令保留自原作 README；实际复现前仍应阅读对应实验说明，并按其要求固定 commit。
+第 6、7、9、10 章有 20 个因体积或版权原因未内置的外部仓库。以下命令保留自原作 README；实际复现前仍应阅读对应实验说明，并按其要求固定 commit。
 
 ```bash
 # 第 6 章 · 评测基准
@@ -79,6 +82,7 @@ git clone https://github.com/bojieli/AdaptThink.git                    chapter7/
 git clone https://github.com/bojieli/AWorld.git                        chapter7/AWorld
 git clone https://github.com/bojieli/SFTvsRL.git                       chapter7/SFTvsRL
 git clone https://github.com/bojieli/verl.git                          chapter7/verl
+git clone https://github.com/bojieli/SandboxFusion.git                 chapter7/SandboxFusion
 git clone https://github.com/thinking-machines-lab/tinker-cookbook.git chapter7/tinker-cookbook
 git clone https://github.com/19PINE-AI/rlvp.git                        chapter7/RLVP/rlvp
 git clone https://github.com/PRIME-RL/SimpleVLA-RL.git                 chapter7/SimpleVLA-RL/SimpleVLA-RL
@@ -152,7 +156,7 @@ git clone https://github.com/joonspk-research/generative_agents.git    chapter10
 
 | 日期 | 阶段 | 本次变化 | 心得文件 |
 | --- | --- | --- | --- |
-| 2026-07-30 | 第 1 章进行中 | 建立精读 fork 首页；整理 7 组主题；补充 RL、神经网络与工具调用的边界说明 | [`studydocs.md`](studydocs.md) |
+| 2026-07-30 | 第 1 章进行中 | 建立精读 fork 首页；整理 7 组主题；补充 RL、神经网络与工具调用的边界说明；同步上游最新的 94 个实验、10 种语言和 20 个外部仓库信息 | [`studydocs.md`](studydocs.md) |
 
 ## 🏷️ 笔记标记
 
