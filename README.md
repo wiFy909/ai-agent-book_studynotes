@@ -8,7 +8,7 @@
 
 [![Upstream](https://img.shields.io/badge/原作-bojieli%2Fai--agent--book-111827?style=for-the-badge&logo=github)](https://github.com/bojieli/ai-agent-book)
 [![Study](https://img.shields.io/badge/精读进度-第_1_章进行中-06b6d4?style=for-the-badge&logo=readme&logoColor=white)](#-当前精读进度)
-[![Notes](https://img.shields.io/badge/主题笔记-7_组-8b5cf6?style=for-the-badge&logo=markdown&logoColor=white)](studydocs.md)
+[![Notes](https://img.shields.io/badge/主题笔记-9_组-8b5cf6?style=for-the-badge&logo=markdown&logoColor=white)](studydocs.md)
 [![License](https://img.shields.io/badge/License-Apache--2.0-f59e0b?style=for-the-badge)](LICENSE)
 
 [原作仓库](https://github.com/bojieli/ai-agent-book) ·
@@ -106,7 +106,7 @@ git clone https://github.com/joonspk-research/generative_agents.git    chapter10
 | --- | --- | --- |
 | 🔍 精读 | 回到原文定位概念、论证和边界，不用二手摘要替代正文 | 带原文路径的引用与章节笔记 |
 | 🧪 实践 | 亲手运行配套代码，记录环境、输入、观察、失败与恢复 | 可复现的实验记录与代码改动 |
-| 🧭 经验对照 | 用自己的 Agent 与 Vibe Coding 经历检验书中的工程判断 | “符合经验 / 修正旧认知 / 仍待验证”的标记 |
+| 🧭 经验对照 | 用自己的 Agent 与 Vibe Coding 经历相互印证 | “符合经验 / 修正旧认知 / 仍待验证”的标记 |
 | 📝 自评估 | 判断内容是否高价值、适用条件是什么、能否迁移到真实项目 | 个人解读、反例、行动项和复盘 |
 
 我的经验坐标从 2022 年开始：最初主要把 AI 当作单一语言模型来问答，随后经历提示词、API 与工具调用，再进入能读写文件、执行命令、操作浏览器和协作完成任务的 Agent 工作流。现在的重点是 Harness 级 Vibe Coding：不只看模型能不能生成答案，更关注上下文是否充分、工具接口是否清楚、权限是否受控、结果是否验证、失败能否纠正。
@@ -136,26 +136,28 @@ git clone https://github.com/joonspk-research/generative_agents.git    chapter10
 
 ## 📍 当前精读进度
 
-**最后更新：2026-07-30 · 当前阶段：第 1 章《Agent 基础知识》进行中**
+**最后更新：2026-07-31 · 当前阶段：第 1 章《Agent 基础知识》进行中**
 
 | 进度项 | 当前状态 | 直达入口 |
 | --- | --- | --- |
 | 章节 | 第 1 / 10 章，进行中；尚不代表第 1 章已完成 | [第 1 章正文](book/chapter1.md) |
-| 已记录主题 | 7 组：工具设计、Harness、学习机制、上下文组成、ReAct、Harness 方法论、ACI | [打开学习笔记](studydocs.md) |
+| 已记录主题 | 9 组：工具设计、Harness、学习机制、上下文组成、ReAct、Harness 方法论、ACI、模型选择、Agent 安全 | [打开学习笔记](studydocs.md) |
 | 代码实践 | 尚未在本次提交中形成新的实验验收记录 | [第 1 章实验目录](chapter1/README.md) |
-| 本轮记录 | 学习进度未前移；完成 GitHub 原生笔记结构、个人实践时间线和五角学习闭环重构 | [查看 `studydocs.md`](studydocs.md) |
+| 本轮记录 | 继续第 1 章精读；新增模型选择与 Agent 安全概览两组笔记；本轮仍未形成新的实验验收记录 | [查看 `studydocs.md`](studydocs.md) |
 
 ### 本阶段心得
 
 - **强模型不会让 Harness 消失。** 模型越能自主决定工具调用，工程层越要提供充分上下文、清晰接口、权限约束、结果验证和失败纠正。
 - **强化学习内化的是决策策略，不是外部工具本身。** 搜索、代码沙盒和文件系统仍由外部环境提供；模型学习的是何时调用、怎样调用以及何时停止。
 - **可靠性来自完整链条。** ReAct 轨迹让过程可观察，ACI 让工具更难被误用，验证与纠正则把一次生成变成可恢复的任务执行。
+- **模型选择和安全边界要一起判断。** 简单任务优先考虑成本与确定性，复杂任务依赖更强推理模型；护栏需要沿输入侧、执行侧和输出侧分层放置。
 - **推演必须与事实分开。** 关于“模型最终能否生成一切工具”等远期判断，目前只作为个人假设保留，后续需要用章节内容和实践继续检验。
 
 ### 学习更新记录
 
 | 日期 | 阶段 | 本次变化 | 心得文件 |
 | --- | --- | --- | --- |
+| 2026-07-31 | 第 1 章进行中 | 新增模型选择与 Agent 安全概览两组笔记；将已记录主题更新为 9 组；本轮仍未形成新的实验验收记录 | [`studydocs.md`](studydocs.md) |
 | 2026-07-30 | 第 1 章进行中 | 学习内容未前移；将笔记改为 GitHub 原生的“原文—来源—心得”结构；把 2022—2026 个人实践改为连续时间线，并将当前 Agent 架构独立展示；把学习流程改为顺时针五角闭环 | [`studydocs.md`](studydocs.md) |
 | 2026-07-30 | 第 1 章进行中 | 建立精读 fork 首页；整理 7 组主题；补充 RL、神经网络与工具调用的边界说明；同步上游最新的 94 个实验、10 种语言和 20 个外部仓库信息 | [`studydocs.md`](studydocs.md) |
 
