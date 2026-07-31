@@ -142,8 +142,14 @@ git clone https://github.com/joonspk-research/generative_agents.git    chapter10
 | --- | --- | --- |
 | 章节 | 第 1 / 10 章，进行中；尚不代表第 1 章已完成 | [第 1 章正文](book/chapter1.md) |
 | 已记录主题 | 9 组：工具设计、Harness、学习机制、上下文组成、ReAct、Harness 方法论、ACI、模型选择、Agent 安全 | [打开学习笔记](studydocs.md) |
-| 代码实践 | 尚未在本次提交中形成新的实验验收记录 | [第 1 章实验目录](chapter1/README.md) |
-| 本轮记录 | 继续第 1 章精读；新增模型选择与 Agent 安全概览两组笔记；本轮仍未形成新的实验验收记录 | [查看 `studydocs.md`](studydocs.md) |
+| 代码实践 | 已完成 Experiment 1-1 的 Kimi K3 实机复现；5 个上下文臂中仅 `full`、`no_reasoning` 得到目标数值 | [实验复现记录](experiments-replication.md) |
+| 本轮记录 | 补充两项文档勘误、消融实验结果和证据；第 1 章仍在精读中 | [勘误与补充](correction-and-supplement.md) |
+
+### 本轮学习：结论与耗时点
+
+- **已推进到“读懂 + 实测”**：Experiment 1-1 显示，`success=true` 只表示循环产出最终文本；是否完成数值任务必须同时看 `canonical_answer_correct`。 [查看完整结论](experiments-replication.md#对作者结论的修正或补充)
+- **最耗时的是上下文缺失后的无效循环**：`no_history` 在 5 轮内重复换汇调用仍未作答（57.09s），而完整上下文在 32.95s 完成；因此实验记录同时保留耗时、工具调用和正确性。 [查看逐臂结果](experiments-replication.md#实验结果)
+- **复核入口**：[学习笔记](studydocs.md) · [勘误记录](correction-and-supplement.md) · [实验记录](experiments-replication.md) · [原始证据](chapter1/context/validation/real_kimi_k3_20260731T051135Z/evidence.json)
 
 ### 本阶段心得
 
@@ -157,6 +163,7 @@ git clone https://github.com/joonspk-research/generative_agents.git    chapter10
 
 | 日期 | 阶段 | 本次变化 | 心得文件 |
 | --- | --- | --- | --- |
+| 2026-07-31 | 第 1 章进行中 | 完成 Experiment 1-1 的 Kimi K3 实机复现；记录上下文消融的正确性、耗时和对原作结论的边界补充 | [实验复现记录](experiments-replication.md) |
 | 2026-07-31 | 第 1 章进行中 | 新增模型选择与 Agent 安全概览两组笔记；将已记录主题更新为 9 组；本轮仍未形成新的实验验收记录 | [`studydocs.md`](studydocs.md) |
 | 2026-07-30 | 第 1 章进行中 | 学习内容未前移；将笔记改为 GitHub 原生的“原文—来源—心得”结构；把 2022—2026 个人实践改为连续时间线，并将当前 Agent 架构独立展示；把学习流程改为顺时针五角闭环 | [`studydocs.md`](studydocs.md) |
 | 2026-07-30 | 第 1 章进行中 | 建立精读 fork 首页；整理 7 组主题；补充 RL、神经网络与工具调用的边界说明；同步上游最新的 94 个实验、10 种语言和 20 个外部仓库信息 | [`studydocs.md`](studydocs.md) |
@@ -175,7 +182,7 @@ git clone https://github.com/joonspk-research/generative_agents.git    chapter10
 如果你想系统学习原作，建议从[官方在线版](https://bojieli.github.io/ai-agent-book/)或[原作 README](https://github.com/bojieli/ai-agent-book#readme)开始；这个 fork 更适合作为一份“别人怎样把教程读进工程实践”的旁注。
 
 ```bash
-command git clone https://github.com/wiFy909/ai-agent-book_studynotes.git
+git clone <当前学习 fork 的 GitHub 地址>
 cd ai-agent-book_studynotes
 ```
 
@@ -188,7 +195,7 @@ cd ai-agent-book_studynotes
 ```text
 bojieli/ai-agent-book                 原作与内容主线
         │
-        └── wiFy909/ai-agent-book_studynotes
+        └── 当前学习 fork
               ├── 同步上游正文与配套代码
               └── 维护个人精读、实践与复盘记录
 ```

@@ -1,0 +1,67 @@
+[
+  {
+    "test_name": "Baseline - Full Context",
+    "case_name": "Multinational Budget",
+    "context_mode": "full",
+    "execution_time": 80.79,
+    "iterations": 3,
+    "num_tool_calls": 6,
+    "success": true,
+    "has_final_answer": true,
+    "error": null,
+    "reasoning_steps": 3,
+    "final_answer_preview": "** The PDF contains no monetary values (it is an Adobe Vendor Security Review white paper), so the provided regional data was used. Consolidated Q1 2024 expenses total **$11,990,955.43 USD**, with an ..."
+  },
+  {
+    "test_name": "Ablation 1 - No Historical Tool Calls",
+    "case_name": "Multinational Budget",
+    "context_mode": "no_history",
+    "execution_time": 110.95,
+    "iterations": 10,
+    "num_tool_calls": 30,
+    "success": false,
+    "has_final_answer": false,
+    "error": null,
+    "reasoning_steps": 10,
+    "final_answer_preview": null
+  },
+  {
+    "test_name": "Ablation 2 - No Reasoning Process",
+    "case_name": "Multinational Budget",
+    "context_mode": "no_reasoning",
+    "execution_time": 73.55,
+    "iterations": 3,
+    "num_tool_calls": 6,
+    "success": true,
+    "has_final_answer": true,
+    "error": null,
+    "reasoning_steps": 2,
+    "final_answer_preview": "**\n- PDF contains **no monetary values** (Adobe VSR security white paper)\n- Total global expenses: **$11,990,955.43 USD**\n- Average per region: **$2,398,191.09 USD**\n- Regional shares: Japan 21.20%, U..."
+  },
+  {
+    "test_name": "Ablation 3 - No Tool Call Commands",
+    "case_name": "Multinational Budget",
+    "context_mode": "no_tool_calls",
+    "execution_time": 172.48,
+    "iterations": 1,
+    "num_tool_calls": 0,
+    "success": true,
+    "has_final_answer": true,
+    "error": null,
+    "reasoning_steps": 1,
+    "final_answer_preview": "Using Q1 2024 approximate exchange rates (GBP 1.27, EUR 1.08, JPY 150/USD, SGD 1.34/USD): **Total global expenses = $11,975,393.03 USD**; **Average per region = $2,395,078.61 USD**; **Regional shares:..."
+  },
+  {
+    "test_name": "Ablation 4 - No Tool Call Results",
+    "case_name": "Multinational Budget",
+    "context_mode": "no_tool_results",
+    "execution_time": 144.18,
+    "iterations": 3,
+    "num_tool_calls": 7,
+    "success": true,
+    "has_final_answer": true,
+    "error": null,
+    "reasoning_steps": 3,
+    "final_answer_preview": "1. **PDF parsed successfully** \u2014 it is Adobe's Extract API demo file (sample content, no genuine Q1 2024 expense figures), so consolidation uses the provided regional data.\n2. **USD conversions:** US ..."
+  }
+]

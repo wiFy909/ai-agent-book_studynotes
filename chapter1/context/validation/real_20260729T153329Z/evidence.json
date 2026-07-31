@@ -10,7 +10,7 @@
     "2400723.93"
   ],
   "command": [
-    "/Users/boj/miniconda3/bin/python",
+    "python3",
     "run_experiment_1_1.py",
     "--provider",
     "kimi",

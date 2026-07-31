@@ -161,7 +161,16 @@ python main.py --provider deepseek --mode interactive
 python main.py --provider deepseek --mode ablation
 ```
 
-#### 4. Run Interactive Mode (Recommended)
+After `python main.py --provider kimi --mode interactive` connects successfully,
+the program is already inside the model interaction prompt, for example
+`[KIMI]>`. At that point, type a task, `help`, `samples`, or `quit`; do not
+paste the startup command again. To return to the normal terminal prompt, type
+`quit` first.
+
+#### 4. Start Interactive Mode (Recommended)
+
+The following are shell commands. Run one of them from the normal terminal
+prompt:
 
 ```bash
 # Default (Doubao)
@@ -169,15 +178,25 @@ python main.py --mode interactive
 
 # With SiliconFlow provider
 python main.py --mode interactive --provider siliconflow
-
-# In interactive mode, you can:
-# - Type 'samples' to see pre-defined tasks
-# - Type 'sample 3' to test PDF parsing
-# - Type 'providers' to list available providers
-# - Type 'provider kimi' to switch providers
-# - Type 'status' to see current configuration
-# - Type 'help' for all commands
 ```
+
+After you see a prompt such as `[DOUBAO]>`, `[SILICONFLOW]>`, or `[KIMI]>`,
+you are inside the program's interactive input. Type your task/question there,
+or use these interactive commands:
+
+| Interactive input | What it does |
+|-------------------|--------------|
+| `samples` | Show pre-defined tasks |
+| `sample 2` | Run the PDF analysis sample task |
+| `create_pdfs` | Generate local sample PDF files |
+| `providers` | List available providers |
+| `provider kimi` | Switch to the Kimi/Moonshot provider |
+| `modes` | List available context modes |
+| `mode no_history` | Switch to a specific context mode |
+| `reset` | Reset the agent trajectory |
+| `status` | Show the current configuration |
+| `help` | Show all commands |
+| `quit` | Exit interactive mode and return to the shell |
 
 #### 5. Run Sample Tasks
 
@@ -194,6 +213,14 @@ python main.py --mode single \
   --context-mode full \
   --provider siliconflow
 ```
+
+> Provider note: `--provider` defaults to `doubao`. The CLI does not
+> automatically choose the provider whose API key you configured. If your key is
+> for `MOONSHOT_API_KEY`, `DEEPSEEK_API_KEY`, `SILICONFLOW_API_KEY`, or
+> `ZHIPU_API_KEY`, pass the matching `--provider kimi|deepseek|siliconflow|zhipu`.
+> Otherwise `python main.py --mode single` still looks for `ARK_API_KEY`, and
+> only falls back through `OPENROUTER_API_KEY` when that key is configured. See
+> [`main.py`](main.py#L1106-L1164).
 
 #### 6. Run Ablation Study
 
@@ -592,7 +619,12 @@ python main.py --provider deepseek --mode interactive
 python main.py --provider deepseek --mode ablation
 ```
 
-#### 4. 交互模式（推荐）
+> 执行 `python main.py --provider kimi --mode interactive` 并成功连接后，程序已经进入模型交互提示符，例如 `[KIMI]>`。
+> 这时应输入任务、`help`、`samples` 或 `quit`，不要再粘贴一次启动命令。如果要回到普通终端提示符，先输入 `quit` 退出交互模式。
+
+#### 4. 启动交互模式（推荐）
+
+下面是普通终端里的启动命令。只在 shell 提示符下运行其中一条：
 
 ```bash
 # Default (Doubao)
@@ -600,15 +632,24 @@ python main.py --mode interactive
 
 # With SiliconFlow provider
 python main.py --mode interactive --provider siliconflow
-
-# In interactive mode, you can:
-# - Type 'samples' to see pre-defined tasks
-# - Type 'sample 3' to test PDF parsing
-# - Type 'providers' to list available providers
-# - Type 'provider kimi' to switch providers
-# - Type 'status' to see current configuration
-# - Type 'help' for all commands
 ```
+
+看到 `[DOUBAO]>`、`[SILICONFLOW]>` 或 `[KIMI]>` 这类提示符后，已经进入程序内部的交互输入区。
+这时可以直接输入任务或问题，也可以输入下面这些交互命令：
+
+| 交互输入 | 作用 |
+|----------|------|
+| `samples` | 查看预置任务 |
+| `sample 2` | 运行 PDF 解析样例任务 |
+| `create_pdfs` | 生成本地样例 PDF 文件 |
+| `providers` | 列出可用的 LLM 提供商 |
+| `provider kimi` | 切换到 Kimi/Moonshot 提供商 |
+| `modes` | 查看可用的上下文模式 |
+| `mode no_history` | 切换到指定上下文模式 |
+| `reset` | 重置 agent 轨迹 |
+| `status` | 查看当前配置 |
+| `help` | 显示全部命令 |
+| `quit` | 退出交互模式并回到普通终端 |
 
 #### 5. 运行样例任务
 
@@ -625,6 +666,13 @@ python main.py --mode single \
   --context-mode full \
   --provider siliconflow
 ```
+
+> Provider 说明：`--provider` 的默认值是 `doubao`，CLI 不会自动选择你已经配置了
+> API Key 的提供商。若你配置的是 `MOONSHOT_API_KEY`、`DEEPSEEK_API_KEY`、
+> `SILICONFLOW_API_KEY` 或 `ZHIPU_API_KEY`，运行样例任务时必须显式传入对应的
+> `--provider kimi|deepseek|siliconflow|zhipu`。否则 `python main.py --mode single`
+> 仍会按默认 `doubao` 查找 `ARK_API_KEY`，只有配置了 `OPENROUTER_API_KEY` 时才会走
+> OpenRouter 兜底。代码依据见 [`main.py`](main.py#L1106-L1164)。
 
 #### 6. 运行消融实验
 

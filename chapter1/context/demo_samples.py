@@ -40,7 +40,7 @@ def main():
     print("💡 USAGE TIPS:")
     print("-"*60)
     print("1. Run 'python main.py' to enter interactive mode")
-    print("2. Type 'sample 3' to test PDF parsing capabilities")
+    print("2. Type 'sample 2' to test PDF parsing capabilities")
     print("3. Type 'sample 5' for the most comprehensive test")
     print("4. Switch modes with 'mode no_reasoning' to see ablation effects")
     
