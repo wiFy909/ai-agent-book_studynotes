@@ -44,6 +44,8 @@ In Chat Completions-style APIs, the core input is a **message list**, usually na
 
 Tool definitions are not messages. They are provided in a separate `tools` field, which declares the tools available to the model and specifies the parameters each tool accepts.
 
+This is the same API request structure as the “five components of context” introduced in Chapter 1, classified from a different angle: the four `system`, `user`, `assistant`, and `tool` message roles correspond to the system prompt, user messages, assistant messages, and tool results, respectively. The remaining component—tool definitions—is passed through the top-level `tools` field rather than a message role. Thus, “four message roles + the `tools` field” exactly covers Chapter 1’s five context components.
+
 ### Single-Turn Request: The Simplest API Call
 
 ![Figure 2-2: Request and Response Structure of a Single-Turn API Call](images/fig2-2.svg)
@@ -441,7 +443,7 @@ That one timestamp line invalidated the KV Cache on every request. The system pr
 > ![Figure 2-6: Intuitive Understanding of the Attention Mechanism](images/fig2-6.svg)
 >
 >
-> The upper part of Figure 2-6 shows how "怎么样" (how is it) matches each preceding word: the strongest match is with "天气" (weather, 0.55), there is some relevance to "北京" (Beijing, 0.35), almost none to "的" (the particle, 0.05), and the remaining weight of about 0.05 goes to "怎么样" itself (not shown separately in the figure)—all weights sum to 1. The final output draws mainly on the information from "天气", which matches intuition exactly.
+> The upper part of Figure 2-6 shows how "怎么样" (how is it) matches each preceding word: the strongest match is with "天气" (weather, 0.55), there is some relevance to "北京" (Beijing, 0.35), almost none to "的" (the particle, 0.05), and the remaining weight of about 0.05 goes to "怎么样" itself—all weights sum to 1. The final output draws mainly on the information from "天气", which matches intuition exactly.
 >
 > An **attention heatmap** arranges the attention weights between each word and all preceding words into a matrix. The lower part of Figure 2-6 shows the complete heatmap: each row is a Query (the word currently being processed), each column is a Key (the word being attended to), and darker cells indicate higher attention weights. The heatmap is triangular because the model generates text from left to right: each word can attend only to itself and the words before it, not to content that has yet to be generated.
 >

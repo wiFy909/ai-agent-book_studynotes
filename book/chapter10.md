@@ -437,7 +437,7 @@ Manager 按顺序依次调用专门 Agent，每个 Agent 完成后返回结果�
 >
 > 调用后，系统创建 Phone Agent 并赋予明确的任务上下文：它是为了协助表单填写而启动的，需要收集哪些信息，以及各字段的格式要求。
 >
-> 两个 Agent 随即进入实时协作模式，沿用实验 10-4 那套异步并行机制。Phone Agent 拨打用户电话，逐个询问：“您好，我正在帮您填写注册表单。首先，请问您的姓名是？”用户回答后立即发送 `{"type": "info_collected", "field": "姓名", "value": "张三"}` 给 Computer Agent，后者随即在网页上定位“姓名”字段并填写；与此同时，Phone Agent 不等电脑操作完成，继续问下一个。这种**问一个、填一个**、对话流不被操作延迟阻塞的模式，是本实验的核心要求。全部信息收集完成后，Phone Agent 发送 `{"type": "task_completed"}`，Computer Agent 提交表单。
+> 两个 Agent 随即进入实时协作模式，沿用实验 10-4 那套异步并行机制。Phone Agent 向用户发起浏览器 WebRTC 音频会话，逐个询问：“您好，我正在帮您填写注册表单。首先，请问您的姓名是？”用户回答后立即发送 `{"type": "info_collected", "field": "姓名", "value": "张三"}` 给 Computer Agent，后者随即在网页上定位“姓名”字段并填写；与此同时，Phone Agent 不等电脑操作完成，继续问下一个。这种**问一个、填一个**、对话流不被操作延迟阻塞的模式，是本实验的核心要求。全部信息收集完成后，Phone Agent 发送 `{"type": "task_completed"}`，Computer Agent 提交表单。这里的“电话”指实时音频交互，不要求接入 PSTN 或 E.164 号码；本机 WebRTC 页面即可完成实验，部署到远端时再按网络环境补充信令与 TURN。
 >
 > **实验要求**：
 > 1. 实现能自主决策启动 Phone Agent 的 Computer Use Agent
@@ -521,6 +521,10 @@ MetaGPT 的迭代改进则主要发生在工程师环节，机制是**可执行�
 **AutoGen group chat：共享对话记录 + 中心化调度。** AutoGen 的 group chat 让多个 Agent 参与同一场会话：每轮由一个“发言者选择器”决定下一个发言的 Agent——选择器可以是简单的轮转规则，也可以是一个 LLM 根据当前对话内容判断谁最适合接话；任何 Agent 的发言对所有参与者可见。需要诚实说明的是，它并不是控制流意义上完全去中心化的系统：发言者的选择由一个中心化的 GroupChatManager 统一裁决，而“轮到谁发言”本身就是一种控制流决策。因此它更准确的定位是**“共享对话记录 + 中心化调度”的混合形态**——所有 Agent 看到同一份公共对话记录，但各自保有独立的系统提示词和工具集，而调度权集中在选择器手里。这种模式适合需要多视角讨论、发言顺序难以预先固定的任务（如方案评审、跨领域分析），代价是对话可能发散——人人都在发言而整体不前进，即并发领域的活锁（livelock）——因此需要精心设计终止条件。按本章的维度划分，此处是按其调度机制（中心化选择器）把它归入本节，但在上下文维度上它其实介于共享与不共享之间，属于混合形态——这再次说明拓扑与上下文共享是概念上独立、可以错位组合的两个维度。
 
 **OpenAI Swarm 与 Agents SDK：handoff 网络。** 相比之下，真正在控制流上做到对等去中心化的代表，是 OpenAI 的 Swarm（及其后继 Agents SDK）：它把去中心化做成了最简形态——每个 Agent 配备若干 handoff（移交）选项，可以在任何时刻把控制权移交给网络中的任意其他 Agent。客服分诊 Agent 判断问题涉及退款，就移交给退款 Agent；退款 Agent 处理中发现是技术故障，又可以移交给技术支持 Agent。系统中没有中心调度者，控制权像接力棒一样在对等的 Agent 之间流转，路由决策完全分散在每个 Agent 自己的判断里——这才是干净的“对等移交”，也正是图 10-10 所示链式移交模式的工程实现。对等移交的风险则是成环：A 移交给 B，B 又移交回 A，任务在环路中空转，因此需要移交次数上限之类的保护机制来打断。
+
+> **术语说明：Agent Swarm。** 2025 年以来，“Agent Swarm”（智能体集群）成为各厂商的热门词汇，但它并不对应单一架构。业界用法大致有两类：其一，OpenAI Swarm 式的 handoff 网络（LangGraph 的 swarm 库、微软 Agent Framework 的 handoff 编排同此），是本节的去中心化模式；其二，一些主流商业产品的 Agent Swarm 是规模化的管理者模式：Kimi K2.5 首发的 Agent Swarm 由主 Agent 动态创建上百个子 Agent 并行执行，把 “何时拆、拆几个” 的编排决策通过并行 Agent 强化学习直接训练进模型，K3 将其延续为独立模型档位并开源了配套的并行 Agent 训练沙箱 AgentEnv[^ch10-kimi-swarm]；Anthropic 的多 Agent 研究系统与 Manus 的 Wide Research 同属 orchestrator-worker 星型拓扑。希望读者在阅读本书之后，能够看透概念背后的本质，从第一性原理的角度分析多 agent 系统。
+
+[^ch10-kimi-swarm]: Moonshot AI, *Kimi Agent Swarm: 100 Sub-Agents at Scale*, 2026, https://www.kimi.com/blog/agent-swarm；GTC 2026 上披露并行子 Agent 上限已扩展至 300 个；AgentEnv 为月之暗面与 KVCache.ai 合作开源的 Agent 训练沙箱，随 Kimi K3 于 2026 年 7 月发布。
 
 ### 跨组织协作：A2A 协议
 

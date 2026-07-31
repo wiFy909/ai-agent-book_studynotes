@@ -1,0 +1,4 @@
+# Upstream experiment snapshots are immutable evidence. Preserve their original
+# Markdown spacing instead of rewriting the files merely to satisfy diff checks.
+chapter5/paper-to-ppt/validation/** -whitespace
+chapter10/book-translation/validation/** -whitespace

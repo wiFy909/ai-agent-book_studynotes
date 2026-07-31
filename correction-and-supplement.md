@@ -16,7 +16,7 @@
 
 ### 1. `interactive` 模式说明容易混淆终端命令与模型交互输入
 
-**涉及文件**：[chapter1/context/README.md](chapter1/context/README.md#L622-L652)
+**涉及文件**：[chapter1/context/README.md](chapter1/context/README.md#L614-L667)
 
 **原问题**：`README.md` 的交互模式说明把两类输入放得太近：一类是在普通终端里运行的启动命令，例如 `python main.py --provider kimi --mode interactive`；另一类是在程序进入交互模式后，在 `[KIMI]>` 这类提示符下输入的任务或命令。读者容易在 `[KIMI]>` 里再次粘贴启动命令。
 
@@ -29,12 +29,12 @@
 
 **已修正说明**：
 
-- 在 [Kimi / DeepSeek 集成测试说明](chapter1/context/README.md#L622-L623) 下补充：连接成功后已经进入模型交互提示符，不要再次粘贴启动命令。
-- 在 [启动交互模式说明](chapter1/context/README.md#L625-L652) 中拆分普通终端命令和交互模式命令：`bash` 代码块只放启动命令，交互输入改为带说明的表格。
+- 在 [Kimi / DeepSeek 集成测试说明](chapter1/context/README.md#L614-L638) 下补充：连接成功后已经进入模型交互提示符，不要再次粘贴启动命令。
+- 在 [启动交互模式说明](chapter1/context/README.md#L640-L667) 中拆分普通终端命令和交互模式命令：`bash` 代码块只放启动命令，交互输入改为带说明的表格。
 
 ### 2. `single` 样例任务未说明 `--provider` 默认值与 API Key 匹配关系
 
-**涉及文件**：[chapter1/context/README.md](chapter1/context/README.md#L201-L223)、[chapter1/context/README.md](chapter1/context/README.md#L654-L675)、[chapter1/context/main.py](chapter1/context/main.py#L1106-L1164)
+**涉及文件**：[chapter1/context/README.md](chapter1/context/README.md#L201-L223)、[chapter1/context/README.md](chapter1/context/README.md#L669-L692)、[chapter1/context/main.py](chapter1/context/main.py#L1094-L1136)
 
 **原问题**：`README.md` 的样例任务段同时给出 `python main.py --mode single` 和 `python main.py --mode single --provider doubao`，但没有说明前者并不会自动使用读者已经配置好的其他提供商 API Key。读者如果只配置了 Kimi、DeepSeek、SiliconFlow 或 Zhipu 等非 Doubao Key，不加匹配的 `--provider` 就会按默认 `doubao` 查找 `ARK_API_KEY`，从而失败；只有另配 `OPENROUTER_API_KEY` 时才会进入 OpenRouter 兜底路径。
 
@@ -43,7 +43,7 @@
 - `main.py` 的 CLI 参数把 `--provider` 默认值设为 `doubao`。
 - 不指定 `--provider` 时，程序不会扫描已经配置了哪个提供商的 API Key，而是按默认 `doubao` 读取 `ARK_API_KEY`。
 - 若默认提供商 Key 缺失但存在 `OPENROUTER_API_KEY`，程序会走 OpenRouter 兜底；两者都没有时退出并提示缺少 API Key。
-- 配置了 `MOONSHOT_API_KEY`、`DEEPSEEK_API_KEY`、`SILICONFLOW_API_KEY` 或 `ZHIPU_API_KEY` 时，需要显式传入对应的 `--provider kimi|deepseek|siliconflow|zhipu`。
+- 配置了 `MOONSHOT_API_KEY`（也兼容旧变量 `KIMI_API_KEY`）、`DEEPSEEK_API_KEY`、`SILICONFLOW_API_KEY` 或 `ZHIPU_API_KEY` 时，需要显式传入对应的 `--provider kimi|deepseek|siliconflow|zhipu`。
 
 **已修正说明**：
 

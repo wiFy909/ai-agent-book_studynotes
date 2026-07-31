@@ -44,8 +44,22 @@ Uses a pre-generated chaotic `wiki.md`:
 ### Installation
 
 ```bash
+# From the repository root: use the shared Chapter 2 environment
+uv sync --locked --python 3.12 --extra ch2
+
+# Activate it before changing directories:
+# macOS/Linux:
+source .venv/bin/activate
+# Windows PowerShell: .venv\Scripts\Activate.ps1
+# Windows cmd: .venv\Scripts\activate.bat
+
+# pip fallback when uv is not installed:
+# python -m pip install -e ".[ch2]"
+
 cd chapter2/prompt-engineering
-pip install -r requirements.txt
+
+# Single-project compatibility path, still supported during migration:
+# python -m pip install -r requirements.txt
 ```
 
 (Older docs may mention `projects/week2/prompt-engineering`; use this repo path.)
@@ -85,6 +99,15 @@ The rejected OpenAI-direct/OpenRouter preflights and any failed tasks remain
 evidence; they are not converted into zero-score model outcomes. Campaign
 completion requires every arm/task receipt, objective τ-bench scoring, hashes,
 usage/cost, and a clean credential scan, regardless of which hypothesis wins.
+
+The completed canonical run is
+`runs/exp2-4-kimi-k3-20260730-v7`: all 60 cells have real Kimi K3 action/user
+receipts and no transport or task errors. Its observed pass counts were
+baseline 7/10, Trump 6/10, casual 9/10, randomized organization 8/10,
+no-description 9/10, and all ablations 8/10. These results complete the
+preregistered experiment but do **not** reproduce the manuscript's historical
+“over 30%” and “45%” point estimates; `comparison.json` records that
+qualification instead of retrofitting a favorable claim.
 
 Example **real smoke** table (`--model gpt-4o --env airline --end-index 4`, only 4 tasks/group—illustrates table shape, not stable science):
 
@@ -292,8 +315,22 @@ User strategies include `llm`, `react`, `verify`, `reflection`. See original τ-
 ### 安装
 
 ```bash
+# 在仓库根目录使用统一的第 2 章环境
+uv sync --locked --python 3.12 --extra ch2
+
+# 切换目录前先激活环境：
+# macOS/Linux：
+source .venv/bin/activate
+# Windows PowerShell：.venv\Scripts\Activate.ps1
+# Windows cmd：.venv\Scripts\activate.bat
+
+# 未安装 uv 时可用 pip 兜底：
+# python -m pip install -e ".[ch2]"
+
 cd chapter2/prompt-engineering
-pip install -r requirements.txt
+
+# 迁移期间仍支持单项目兼容路径：
+# python -m pip install -r requirements.txt
 ```
 
 （旧文档可能写 `projects/week2/prompt-engineering`；请使用本仓库路径。）

@@ -10,15 +10,7 @@ on:
     branches: [main]
     paths:
       - 'book/**'
-      - 'book-zhtw/**'
       - 'book-en/**'
-      - 'book-ru/**'
-      - 'book-ta/**'
-      - 'book-vi/**'
-      - 'book-ja/**'
-      - 'book-ko/**'
-      - 'book-ar/**'
-      - 'book-tr/**'
       - 'build_epub.sh'
       - 'epub.css'
       - 'epub_external_links.lua'
@@ -35,22 +27,13 @@ on:
         options:
           - all
           - zh-CN
-          - zh-TW
           - en
-          - ru
-          - ta
-          - vi
-          - tr
-          - ko
-          - ja
-          - ar
 
 permissions:
   contents: write
 
 concurrency:
-  # Keep duplicate runs for the same ref deduplicated without allowing a
-  # Korean feature-branch verification run to cancel a main release build.
+  # Keep duplicate runs for the same ref deduplicated.
   group: build-latest-${{ github.ref }}
   cancel-in-progress: true
 
@@ -116,22 +99,15 @@ jobs:
 
       # PingFang is an on-demand font since macOS Sequoia and is absent on fresh
       # runners (only an unusable reserved UI copy exists); without it
-      # rsvg-convert renders Chinese figure text in a fallback font (Japanese
-      # glyph variants). The Apple-font script fetches the real font from Apple's
-      # asset CDN. Arabic and Korean fonts are required by release builds; the
-      # Japanese Noto fonts (WIP ja build) remain non-fatal so a bad cask name
-      # can never break the release build for the other languages.
+      # rsvg-convert renders Chinese figure text in a fallback font. The
+      # Apple-font script fetches the real font from Apple's asset CDN.
       - name: Install fonts (cache miss)
         if: steps.fonts-cache.outputs.cache-hit != 'true'
         env:
           HOMEBREW_NO_AUTO_UPDATE: '1'
           HOMEBREW_NO_INSTALL_CLEANUP: '1'
         run: |
-          brew install --cask font-dejavu font-noto-sans-cjk-sc font-noto-sans-cjk-tc font-noto-serif-tamil font-amiri font-noto-naskh-arabic font-noto-sans-arabic
-          brew install --cask font-noto-sans-cjk-jp || true
-          brew install --cask font-noto-serif-cjk-jp || brew install --cask font-noto-serif-cjk || true
-          brew install --cask font-noto-sans-cjk-kr
-          brew install --cask font-noto-serif-cjk-kr || brew install --cask font-noto-serif-cjk
+          brew install --cask font-dejavu font-noto-sans-cjk-sc
           bash .github/scripts/install_apple_fonts.sh
 
       # Refresh fontconfig on every run (the cache restore doesn't touch it).
@@ -141,11 +117,10 @@ jobs:
       - name: Refresh font cache
         run: fc-cache -f
 
-      # Each language is built in its own background job so the XeLaTeX
+      # Each retained edition is built in its own background job so the XeLaTeX
       # passes run concurrently instead of back-to-back. Output is captured per
-      # language and printed after all jobs finish (interleaved live logs would
-      # be unreadable). The ja build (WIP) runs in the same batch but is
-      # non-fatal — only a main-language failure fails the step.
+      # edition and printed after all jobs finish (interleaved live logs would
+      # be unreadable).
       # macOS runners ship bash 3.2, so no associative arrays: pid↔dir pairing
       # is carried in a "pid:dir" string list.
       - name: Build PDFs
@@ -155,28 +130,18 @@ jobs:
         run: |
           set -u
           if [ "$GITHUB_REF" = "refs/heads/main" ] || [ "$EDITION" = "all" ]; then
-            main="book book-zhtw book-en book-ru book-vi book-ta book-ar book-tr book-ko"
-            optional="book-ja"
+            main="book book-en"
           else
             # workflow_dispatch on a feature branch is a focused edition
             # verification run. Release publication remains gated to main.
             case "$EDITION" in
               zh-CN) main="book" ;;
-              zh-TW) main="book-zhtw" ;;
               en) main="book-en" ;;
-              ru) main="book-ru" ;;
-              ta) main="book-ta" ;;
-              vi) main="book-vi" ;;
-              tr) main="book-tr" ;;
-              ko) main="book-ko" ;;
-              ja) main="book-ja" ;;
-              ar) main="book-ar" ;;
               *) echo "::error::Unsupported edition: $EDITION"; exit 2 ;;
             esac
-            optional=""
           fi
           pids=""
-          for dir in $main $optional; do
+          for dir in $main; do
             ( cd "$dir" && bash build_pdf.sh ) > "build_${dir}.log" 2>&1 &
             pids="$pids $!:$dir"
           done
@@ -185,14 +150,12 @@ jobs:
             pid="${pd%%:*}"; dir="${pd##*:}"
             if wait "$pid"; then
               echo "OK: $dir"
-            elif [ "$dir" = "book-ja" ]; then
-              echo "::warning::$dir PDF build failed (WIP, non-fatal)"
             else
               echo "::error::PDF build failed for $dir"
               fail=1
             fi
           done
-          for dir in $main $optional; do
+          for dir in $main; do
             echo "===================== $dir ====================="
             cat "build_${dir}.log" 2>/dev/null || true
           done
@@ -202,8 +165,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           python3 .github/scripts/verify_pdf_fonts.py \
-            "book/深入理解-AI-Agent-李博杰-v1.3.pdf" \
-            "book-zhtw/深入理解-AI-Agent-李博杰-v1.3-zhtw.pdf"
+            "book/深入理解-AI-Agent-李博杰-v1.3.pdf"
 
       - name: Build EPUBs
         env:
@@ -214,17 +176,6 @@ jobs:
           else
             ./build_epub.sh "$EDITION"
           fi
-
-      # WIP: ja EPUB depends on the ja PDF above; non-fatal, not part of `all`.
-      - name: Build Japanese EPUB (WIP, non-fatal)
-        if: github.ref == 'refs/heads/main'
-        continue-on-error: true
-        run: ./build_epub.sh ja
-
-      - name: Build Arabic EPUB (WIP, non-fatal)
-        if: github.ref == 'refs/heads/main'
-        continue-on-error: true
-        run: ./build_epub.sh ar
 
       - name: Upload verification artifacts
         if: github.ref != 'refs/heads/main'
@@ -244,25 +195,7 @@ jobs:
           set -e
           out="$(mktemp -d)"
           cp "book/深入理解-AI-Agent-李博杰-v1.3.pdf"              "$out/AI-Agents-in-Depth-zh-CN.pdf"
-          cp "book-zhtw/深入理解-AI-Agent-李博杰-v1.3-zhtw.pdf"   "$out/AI-Agents-in-Depth-zh-TW.pdf"
           cp book-en/AI-Agents-in-Depth-Bojie-Li-v1.3.pdf        "$out/AI-Agents-in-Depth-en.pdf"
-          cp book-ru/AI-Agents-in-Depth-ru.pdf                   "$out/AI-Agents-in-Depth-ru.pdf"
-          cp book-ta/AI-Agents-in-Depth-Bojie-Li-v1.3-ta.pdf     "$out/AI-Agents-in-Depth-ta.pdf"
-          cp book-vi/AI-Agents-in-Depth-Bojie-Li-v1.3-vi.pdf     "$out/AI-Agents-in-Depth-vi.pdf"
-          cp book-ar/AI-Agents-in-Depth-ar.pdf                    "$out/AI-Agents-in-Depth-ar.pdf"
-          cp book-tr/AI-Agents-in-Depth-Bojie-Li-v1.3-tr.pdf      "$out/AI-Agents-in-Depth-tr.pdf"
-          cp book-ko/AI-Agents-in-Depth-ko.pdf                     "$out/AI-Agents-in-Depth-ko.pdf"
           cp "book/深入理解-AI-Agent-李博杰-v1.3.epub"             "$out/AI-Agents-in-Depth-zh-CN.epub"
-          cp "book-zhtw/深入理解-AI-Agent-李博杰-v1.3-zhtw.epub"   "$out/AI-Agents-in-Depth-zh-TW.epub"
           cp book-en/AI-Agents-in-Depth-Bojie-Li-v1.3.epub       "$out/AI-Agents-in-Depth-en.epub"
-          cp book-ru/AI-Agents-in-Depth-ru.epub                  "$out/AI-Agents-in-Depth-ru.epub"
-          cp book-ta/AI-Agents-in-Depth-Bojie-Li-v1.3-ta.epub    "$out/AI-Agents-in-Depth-ta.epub"
-          cp book-vi/AI-Agents-in-Depth-Bojie-Li-v1.3-vi.epub    "$out/AI-Agents-in-Depth-vi.epub"
-          cp book-tr/AI-Agents-in-Depth-Bojie-Li-v1.3-tr.epub    "$out/AI-Agents-in-Depth-tr.epub"
-          cp book-ko/AI-Agents-in-Depth-ko.epub                    "$out/AI-Agents-in-Depth-ko.epub"
-          # WIP: ja artifacts and the Arabic EPUB are copied only if their
-          # non-fatal builds produced them.
-          cp book-ja/AI-Agents-in-Depth-Bojie-Li-v1.3-ja.pdf     "$out/AI-Agents-in-Depth-ja.pdf"  || echo "ja PDF not built yet (WIP) — skipping"
-          cp book-ja/AI-Agents-in-Depth-Bojie-Li-v1.3-ja.epub    "$out/AI-Agents-in-Depth-ja.epub" || echo "ja EPUB not built yet (WIP) — skipping"
-          cp book-ar/AI-Agents-in-Depth-ar.epub                   "$out/AI-Agents-in-Depth-ar.epub" || echo "ar EPUB not built yet (WIP) — skipping"
           gh release upload latest "$out"/* --clobber --repo "${{ github.repository }}"

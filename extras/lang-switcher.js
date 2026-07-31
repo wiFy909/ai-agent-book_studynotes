@@ -26,41 +26,33 @@
     // Keyed by the Chinese label in mkdocs.yml; values per target language.
     // When on a non-default language, sidebar text is replaced from this map.
     var NAV_I18N = {
-      "首页":         { en: "Home",           ru: "Главная",    ta: "முகப்பு",       vi: "Trang chủ",     zhtw: "首頁", ja: "ホーム", ko: "홈", ar: "الرئيسية" },
-      "引言":         { en: "Introduction",   ru: "Введение",   ta: "அறிமுகம்",      vi: "Giới thiệu",    zhtw: "引言", ja: "はじめに", ko: "들어가며", ar: "المقدمة" },
-      "第1章 Agent基础知识": { en: "Chapter 1 · Getting Started with AI Agents", ru: "Глава 1 · Введение в ИИ-агенты",           ta: "அதி. 1 · AI ஏஜெண்ட் அடிப்படைகள்",     vi: "Chương 1 · Nền tảng AI Agent", zhtw: "第 1 章 · Agent 基礎知識", ja: "第1章 · Agent の基礎知識", ko: "제1장 · AI 에이전트 기초", ar: "الفصل 1 · أساسيات الوكلاء" },
-      "第2章 上下文工程":     { en: "Chapter 2 · Context Engineering", ru: "Глава 2 · Инженерия контекста",    ta: "அதி. 2 · சூழல் பொறியியல்",          vi: "Chương 2 · Kỹ thuật ngữ cảnh", zhtw: "第 2 章 · 上下文工程", ja: "第2章 · コンテキストエンジニアリング", ko: "제2장 · 컨텍스트 엔지니어링", ar: "الفصل 2 · هندسة السياق" },
-      "第3章 用户记忆和知识库": { en: "Chapter 3 · User Memory & Knowledge Base", ru: "Глава 3 · Память и база знаний",  ta: "அதி. 3 · பயனர் நினைவகம் & அறிவுத்தளம்", vi: "Chương 3 · Bộ nhớ & Cơ sở kiến thức", zhtw: "第 3 章 · 使用者記憶和知識庫", ja: "第3章 · ユーザーメモリと知識ベース", ko: "제3장 · 사용자 메모리와 지식 베이스", ar: "الفصل 3 · ذاكرة المستخدم وقاعدة المعرفة" },
-      "第4章 工具":           { en: "Chapter 4 · Tools", ru: "Глава 4 · Инструменты",                  ta: "அதி. 4 · கருவிகள்",                vi: "Chương 4 · Công cụ",          zhtw: "第 4 章 · 工具", ja: "第4章 · ツール", ko: "제4장 · 도구", ar: "الفصل 4 · الأدوات" },
-      "第5章 CodingAgent与代码生成": { en: "Chapter 5 · Coding Agent & Code Generation", ru: "Глава 5 · Кодинг-агент и генерация кода",  ta: "அதி. 5 · குறியீட்டு ஏஜெண்ட் & குறியீடு உருவாக்கம்", vi: "Chương 5 · Coding Agent & Tạo mã", zhtw: "第 5 章 · Coding Agent 與程式碼生成", ja: "第5章 · Coding Agent とコード生成", ko: "제5장 · 코딩 에이전트와 코드 생성", ar: "الفصل 5 · وكيل البرمجة وتوليد الشيفرة" },
-      "第6章 Agent的评估":    { en: "Chapter 6 · Evaluating Agents", ru: "Глава 6 · Оценка агентов",      ta: "அதி. 6 · ஏஜெண்ட் மதிப்பீடு",        vi: "Chương 6 · Đánh giá Agent",   zhtw: "第 6 章 · Agent 的評估", ja: "第6章 · Agent の評価", ko: "제6장 · 에이전트 평가", ar: "الفصل 6 · تقييم الوكلاء" },
-      "第7章 模型后训练":     { en: "Chapter 7 · Model Post-Training", ru: "Глава 7 · Постобучение модели",    ta: "அதி. 7 · மாதிரி பிந்தைய பயிற்சி",   vi: "Chương 7 · Post-training mô hình", zhtw: "第 7 章 · 模型後訓練", ja: "第7章 · モデルのポストトレーニング", ko: "제7장 · 모델 사후 학습", ar: "الفصل 7 · ما بعد تدريب النموذج" },
-      "第8章 Agent的持续进化": { en: "Chapter 8 · Continual Evolution of Agents", ru: "Глава 8 · Самоэволюция агента",   ta: "அதி. 8 · ஏஜெண்ட் சுய-பரிணாமம்",     vi: "Chương 8 · Tự tiến hóa của Agent", zhtw: "第 8 章 · Agent 的自我進化", ja: "第8章 · Agent の自己進化", ko: "제8장 · 에이전트의 지속적 진화", ar: "الفصل 8 · التطور الذاتي للوكيل" },
-      "第9章 多模态与实时交互": { en: "Chapter 9 · Multimodal & Real-Time Interaction", ru: "Глава 9 · Мультимодальность и реальное время",  ta: "அதி. 9 · பல்முக & நிகழ்நேரம்",       vi: "Chương 9 · Đa phương thức & Thời gian thực", zhtw: "第 9 章 · 多模態與即時互動", ja: "第9章 · マルチモーダルとリアルタイム対話", ko: "제9장 · 멀티모달과 실시간 상호작용", ar: "الفصل 9 · تعدد الوسائط والتفاعل الفوري" },
-      "第10章 多Agent协作":   { en: "Chapter 10 · Multi-Agent Collaboration", ru: "Глава 10 · Мультиагентное взаимодействие",  ta: "அதி. 10 · பல-ஏஜெண்ட் ஒத்துழைப்பு", vi: "Chương 10 · Đa Agent cộng tác", zhtw: "第 10 章 · 多 Agent 協作", ja: "第10章 · マルチ Agent 協調", ko: "제10장 · 멀티 에이전트 협업", ar: "الفصل 10 · تعاون متعدد الوكلاء" },
-      "后记":         { en: "Afterword", ru: "Послесловие",        ta: "பின்னுரை",       vi: "Lời bạt",         zhtw: "後記", ja: "あとがき", ko: "맺음말", ar: "الخاتمة" },
-      "思考题参考答案": { en: "Reference Answers", ru: "Ответы к вопросам",  ta: "பதில் வழிகாட்டி", vi: "Đáp án tham khảo", zhtw: "思考題參考答案", ja: "演習問題の解答例", ko: "생각해 볼 문제 참고 답안", ar: "إجابات الأسئلة" },
+      "首页":         { en: "Home" },
+      "引言":         { en: "Introduction" },
+      "第1章 Agent基础知识": { en: "Chapter 1 · Getting Started with AI Agents" },
+      "第2章 上下文工程":     { en: "Chapter 2 · Context Engineering" },
+      "第3章 用户记忆和知识库": { en: "Chapter 3 · User Memory & Knowledge Base" },
+      "第4章 工具":           { en: "Chapter 4 · Tools" },
+      "第5章 CodingAgent与代码生成": { en: "Chapter 5 · Coding Agent & Code Generation" },
+      "第6章 Agent的评估":    { en: "Chapter 6 · Evaluating Agents" },
+      "第7章 模型后训练":     { en: "Chapter 7 · Model Post-Training" },
+      "第8章 Agent的持续进化": { en: "Chapter 8 · Continual Evolution of Agents" },
+      "第9章 多模态与实时交互": { en: "Chapter 9 · Multimodal & Real-Time Interaction" },
+      "第10章 多Agent协作":   { en: "Chapter 10 · Multi-Agent Collaboration" },
+      "后记":         { en: "Afterword" },
+      "思考题参考答案": { en: "Reference Answers" },
       // Nested sub-entry under each chapter (the experiment index).
-      "配套实验":     { en: "Experiments", ru: "Эксперименты",     ta: "சோதனைகள்",     vi: "Thí nghiệm",   zhtw: "配套實驗", ko: "실습", ar: "التجارب" },
+      "配套实验":     { en: "Experiments" },
     };
 
     // Right-sidebar TOC title ("目录"), fixed by theme.language at build
     // time — rewritten client-side on translated editions.
     var TOC_TITLE = {
-      zh: "目录", zhtw: "目錄", en: "On this page",
-      ta: "உள்ளடக்கம்", vi: "Mục lục", ru: "На этой странице",
-      ko: "목차", ar: "في هذه الصفحة",
+      zh: "目录", en: "On this page",
     };
 
     var SEARCH_STRINGS = {
       zh:   { placeholder: "搜索",   searching: "正在初始化搜索引擎", input: "键入进行检索" },
       en:   { placeholder: "Search", searching: "Initializing search", input: "Type to search" },
-      zhtw: { placeholder: "搜尋",   searching: "正在初始化搜尋引擎", input: "鍵入進行檢索" },
-      ru:   { placeholder: "Поиск",  searching: "Инициализация поиска", input: "Введите запрос" },
-      ta:   { placeholder: "தேடு",   searching: "தேடல் தொடங்கப்படுகிறது", input: "தட்டச்சு செய்து தேடவும்" },
-      vi:   { placeholder: "Tìm kiếm", searching: "Đang khởi tạo",     input: "Gõ để tìm kiếm" },
-      ko:   { placeholder: "검색", searching: "검색 엔진을 초기화하는 중", input: "검색어를 입력하세요" },
-      ar:   { placeholder: "بحث", searching: "جارٍ تهيئة البحث", input: "اكتب للبحث" },
     };
 
     // ── helpers ───────────────────────────────────────────────
@@ -127,7 +119,7 @@
       var pp = cleanPath.replace(/^\//, "").replace(/\/$/, "");
 
       // Chapter prose: <srcPrefix>chapterN[<srcSuffix>]
-      // E.g. /book/chapter1/  or  /book-zhtw/chapter1.zhtw/
+      // E.g. /book/chapter1/ or /book-en/chapter1/
       var proseRe = new RegExp("^" + escapeRe(src.prefix) + "chapter(\\d+)" + escapeRe(src.suffix || "") + "$");
       var proseMatch = pp.match(proseRe);
       if (proseMatch) {
@@ -191,10 +183,7 @@
     function siteBasePath() {
       try { return new URL(window.SITE_ROOT).pathname; } catch (_) {}
       var p = location.pathname;
-      var idx = Math.max(p.indexOf("book-en/"), p.indexOf("book-ru/"), p.indexOf("book-ta/"),
-                         p.indexOf("book-vi/"), p.indexOf("book-zhtw/"),
-                         p.indexOf("book-ja/"), p.indexOf("book-ko/"), p.indexOf("book-ar/"),
-                         p.indexOf("book/"));
+      var idx = Math.max(p.indexOf("book-en/"), p.indexOf("book/"));
       if (idx === -1) return "/";
       return p.slice(0, idx);
     }
@@ -293,8 +282,8 @@
     // ── language switch (the actual navigation) ──────────────
 
     function applyDocumentLocale(code) {
-      document.documentElement.lang = code === "zhtw" ? "zh-TW" : code;
-      document.documentElement.dir = code === "ar" ? "rtl" : "ltr";
+      document.documentElement.lang = code;
+      document.documentElement.dir = "ltr";
     }
 
     function switchTo(target) {

@@ -18,7 +18,7 @@ hooks:
 theme:
   name: material
   language: zh
-  # Custom overrides: injects the language-tab switcher into the header.
+  # Custom overrides: injects the Chinese/English edition selector into the header.
   custom_dir: overrides
   logo: assets/logo.svg
   favicon: assets/logo.svg
@@ -83,10 +83,8 @@ plugins:
   # Default Material plugins, made explicit so we can tune them.
   - search:
       lang:
-        - ja          # CJK-aware tokenizer; far better for Chinese than `en`
-        - ko          # Korean tokenizer for the Korean edition
+        - zh
         - en
-        - ar
   # Stamp each page with its git commit date — readers see "最后更新" trust signal.
   - git-revision-date-localized:
       enable_creation_date: true
@@ -136,8 +134,8 @@ extra_css:
   - extras/lang-switcher.css
   - extras/book-theme.css
 
-# Language definitions for the switcher tab bar.
-# Each entry maps its prefix + suffix rules to rewrite URLs across editions.
+# Chinese and English edition definitions for the header selector.
+# Each entry maps its prefix + suffix rules to rewrite URLs between editions.
 extra:
   languages:
     # `prefix` and `suffix` apply to chapter prose (book*/chapterN[.suffix]/).
@@ -145,15 +143,7 @@ extra:
     # index page (chapterN/README.<readmeSuffix>/), which mkdocs renders
     # from the source file README.<suffix>.md.
     zh:   { label: 中文,      prefix: book/,      default: true }
-    zhtw: { label: 繁體中文（台灣）, prefix: book-zhtw/, suffix: .zhtw,  readmeSuffix: zh-TW }
     en:   { label: English,   prefix: book-en/,                   readmeSuffix: en }
-    ru:   { label: Русский,    prefix: book-ru/,                   readmeSuffix: ru }
-    ta:   { label: தமிழ்,      prefix: book-ta/,   suffix: .ta,   readmeSuffix: ta }
-    vi:   { label: Tiếng Việt, prefix: book-vi/,   suffix: .vi,   readmeSuffix: vi }
-    ja:   { label: 日本語,     prefix: book-ja/,   suffix: .ja,   readmeSuffix: ja }
-    ko:   { label: 한국어,     prefix: book-ko/,   suffix: .ko,   readmeSuffix: ko }
-    ar:   { label: العربية,    prefix: book-ar/,   suffix: .ar,   readmeSuffix: ar }
-    tr:   { label: Türkçe,      prefix: book-tr/,   suffix: .tr,   readmeSuffix: tr }
 
 nav:
   # The left sidebar is a clean chapter tree. With navigation.indexes,
