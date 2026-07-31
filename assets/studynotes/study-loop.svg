@@ -1,3 +1,8 @@
+<!--
+Copyright © 2026 wiFy909
+Licensed under CC BY-NC-SA 4.0.
+See ../../LICENSE-NOTES.md for scope and terms.
+-->
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
   <title id="title">个人学习与提交的五角循环</title>
   <desc id="desc">精读原文、实践代码、经验对照、价值标记、提交更新五个步骤沿五边形顺时针循环</desc>

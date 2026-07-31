@@ -1,5 +1,16 @@
 # 实验复现记录
 
+> [!IMPORTANT]
+> **分层许可证说明**
+>
+> 自本仓库首次引入 [`LICENSE-NOTES.md`](LICENSE-NOTES.md) 的提交起，
+> 本文件中由 `wiFy909` 独立撰写的实验过程记录、结果分析、结论和复盘采用
+> [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)。
+> 实验代码、配置、日志、原始证据、模型输出、事实数据、上游材料和第三方内容
+> 不在该许可范围内，继续适用 [Apache License 2.0](LICENSE)
+> 或其各自的许可证。详细范围和历史版本说明见
+> [`LICENSE-NOTES.md`](LICENSE-NOTES.md)。
+
 ## Experiment 1-1：上下文消融实验
 
 本记录来自本机对 Chapter 1 上下文消融实验的复现。实验目标是检查五种上下文模式对同一数值任务的影响，并判断结果是否支持作者关于 history、reasoning、tool calls、tool results 的结论。

@@ -9,7 +9,8 @@
 [![Upstream](https://img.shields.io/badge/原作-bojieli%2Fai--agent--book-111827?style=for-the-badge&logo=github)](https://github.com/bojieli/ai-agent-book)
 [![Study](https://img.shields.io/badge/精读进度-第_1_章进行中-06b6d4?style=for-the-badge&logo=readme&logoColor=white)](#-当前精读进度)
 [![Notes](https://img.shields.io/badge/主题笔记-9_组-8b5cf6?style=for-the-badge&logo=markdown&logoColor=white)](studydocs.md)
-[![License](https://img.shields.io/badge/License-Apache--2.0-f59e0b?style=for-the-badge)](LICENSE)
+[![Upstream License](https://img.shields.io/badge/上游与代码-Apache--2.0-f59e0b?style=for-the-badge)](LICENSE)
+[![Notes License](https://img.shields.io/badge/原创学习材料-CC_BY--NC--SA_4.0-22c55e?style=for-the-badge)](LICENSE-NOTES.md)
 
 [原作仓库](https://github.com/bojieli/ai-agent-book) ·
 [在线阅读](https://bojieli.github.io/ai-agent-book/) ·
@@ -192,7 +193,29 @@ bojieli/ai-agent-book                 原作与内容主线
 - 原作内容与勘误：回到 [`bojieli/ai-agent-book`](https://github.com/bojieli/ai-agent-book)。
 - 本 fork 的学习记录：在本仓库持续更新。
 - 同步上游时保留个人学习提交，不向原作者仓库直接推送。
-- 许可证继续遵循仓库内的 [Apache License 2.0](LICENSE)；子项目如有独立许可证，以子项目说明为准。
+
+## 📜 许可证
+
+本仓库采用分层授权：
+
+- 从 `bojieli/ai-agent-book` 继承的正文、代码、图片、配置和工程文件，
+  继续遵循 [Apache License 2.0](LICENSE)；
+- `studydocs.md`、`experiments-replication.md`、
+  `correction-and-supplement.md` 和 README 中由 `wiFy909` 独立创作的
+  学习心得、实验分析、勘误说明、经验复盘与阶段总结，采用
+  [CC BY-NC-SA 4.0](LICENSE-NOTES.md)；
+- 原创图表
+  [`assets/studynotes/hero.svg`](assets/studynotes/hero.svg) 和
+  [`assets/studynotes/study-loop.svg`](assets/studynotes/study-loop.svg)
+  采用 [CC BY-NC-SA 4.0](LICENSE-NOTES.md)；
+- 上述文件中的原作引文、代码、命令、事实数据、实验原始证据和第三方材料
+  不会因出现在原创说明旁边而改用 CC 许可证；
+- 子项目或第三方材料存在独立许可证时，以其自身许可证和声明为准。
+
+除适用法律允许的无需授权使用外，超出 CC BY-NC-SA 4.0 授权范围的商业
+使用需要另行取得版权所有者的书面许可。具体适用范围、署名方式、生效时间
+和历史版本边界见
+[`LICENSE-NOTES.md`](LICENSE-NOTES.md)。
 
 ---
 

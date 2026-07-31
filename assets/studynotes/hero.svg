@@ -1,3 +1,8 @@
+<!--
+Copyright © 2026 wiFy909
+Licensed under CC BY-NC-SA 4.0.
+See ../../LICENSE-NOTES.md for scope and terms.
+-->
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
   <title id="title">AI Agent 精读、实验与 Vibe Coding 复盘</title>
   <desc id="desc">上半部分展示当前 Agent 核心与 Harness 工程层的关系，下半部分用一条连续时间线展示 2022 到 2026 年的个人 AI 实践演进</desc>

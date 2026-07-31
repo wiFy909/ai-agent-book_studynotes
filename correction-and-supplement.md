@@ -1,5 +1,15 @@
 # 勘误与补充记录
 
+> [!IMPORTANT]
+> **分层许可证说明**
+>
+> 自本仓库首次引入 [`LICENSE-NOTES.md`](LICENSE-NOTES.md) 的提交起，
+> 本文件中由 `wiFy909` 独立撰写的勘误说明、补充解释和判断采用
+> [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)。
+> 被勘误文件的原文、代码、命令、事实数据、上游材料和第三方内容不在该许可
+> 范围内，继续适用 [Apache License 2.0](LICENSE) 或其各自的许可证。
+> 详细范围和历史版本说明见 [`LICENSE-NOTES.md`](LICENSE-NOTES.md)。
+
 这个文件记录学习过程中发现的项目文件勘误或补充。条目只记录已经验证过的内容；命令、路径、配置键和日志原文保持原样。
 
 ## 2026-07-31

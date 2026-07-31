@@ -1,5 +1,16 @@
 # 学习笔记
 
+> [!IMPORTANT]
+> **分层许可证说明**
+>
+> 自本仓库首次引入 [`LICENSE-NOTES.md`](LICENSE-NOTES.md) 的提交起，
+> 本文件中由 `wiFy909` 独立创作的个人心得、经验对照、实践复盘、
+> 个人判断和补充解释采用
+> [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)。
+> 原作引文、代码、图片、事实数据及其他上游或第三方材料不在该许可范围内，
+> 继续适用 [Apache License 2.0](LICENSE) 或其各自的许可证。
+> 详细范围和历史版本说明见 [`LICENSE-NOTES.md`](LICENSE-NOTES.md)。
+
 ## 当前学习状态
 
 - **最后更新：** 2026-07-31
