@@ -23,18 +23,18 @@ print(f"SILICONFLOW_API_KEY available: {'Yes' if sf_key else 'No'}")
 if ark_key:
     from agent import ContextAwareAgent, ContextMode
     from config import Config
-
+    
     # Check config default
     print(f"\nConfig default provider: {Config.LLM_PROVIDER}")
-
+    
     # Create agent with default provider from config
     agent = ContextAwareAgent(ark_key, ContextMode.FULL, provider=Config.LLM_PROVIDER)
-
+    
     print(f"\n✅ Default agent created successfully!")
     print(f"Provider: {agent.provider}")
     print(f"Model: {agent.model}")
     print(f"Base URL: {agent.client.base_url}")
-
+    
     if agent.provider == "doubao":
         print("\n🎉 SUCCESS: Doubao is the default provider!")
     else:

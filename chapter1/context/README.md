@@ -7,15 +7,25 @@
 
 ---
 
+## Code map
+
+- **Run first:** python main.py --mode interactive (after provider setup).
+- **Start here:** main.py builds the selected provider and agent loop.
+- **Core behavior:** agent.py assembles history, reasoning, tool calls and tool results.
+- **State / protocol:** AgentTrajectory and the provider adapter messages.
+- **Verifier:** the ablation runner and tests under tests/; compare behavior, not just final text.
+- **Experiment variable:** context modes (full, no history, no reasoning, no tool calls, no tool results).
+- **Skip on first pass:** provider-specific clients, plotting and credential checks.
+
 ## English
 
 ### Overview
 
-This project implements a context-aware AI agent with multiple tools (PDF parsing, currency conversion, calculator, code interpreter) and provides comprehensive ablation testing to explore how different context components affect agent behavior and performance. It supports multiple LLM providers: SiliconFlow Qwen, ByteDance Doubao, Moonshot Kimi, and DeepSeek.
+This project implements a context-aware AI agent with multiple tools (PDF parsing, currency conversion, calculator, code interpreter) and provides comprehensive ablation testing to explore how different context components affect agent behavior and performance. It supports multiple LLM providers, including Qwen directly through Alibaba Cloud Model Studio (Bailian), SiliconFlow Qwen, ByteDance Doubao, Moonshot Kimi, and DeepSeek.
 
 ### Key Features
 
-- **Multi-provider Support**: Works with SiliconFlow (Qwen), Doubao (ByteDance), Kimi (Moonshot), and DeepSeek LLMs
+- **Multi-provider Support**: Works with Alibaba Cloud Model Studio (Qwen), SiliconFlow (Qwen), Doubao (ByteDance), Kimi (Moonshot), and DeepSeek LLMs
 - **Multi-tool Agent**: PDF parsing, currency conversion, calculations, and Python code execution
 - **Context Modes**: Five different context configurations for ablation studies
 - **Interactive & Batch Modes**: Run single tasks or comprehensive test suites
@@ -35,6 +45,13 @@ This project implements a context-aware AI agent with multiple tools (PDF parsin
 - **Model**: `Qwen/Qwen3.5-397B-A17B` (customizable)
 - **API**: OpenAI-compatible
 - **Best for**: Complex reasoning tasks, detailed analysis
+
+#### Alibaba Cloud Model Studio / Bailian (Qwen)
+
+- **Model**: `qwen3.7-plus` (customizable with `--model`)
+- **API**: Direct OpenAI-compatible DashScope endpoint; no SiliconFlow account required
+- **Provider names**: `dashscope` (canonical), with `qwen` and `bailian` aliases
+- **Region note**: API keys are region-bound. Mainland keys use the default endpoint; international keys must set `DASHSCOPE_BASE_URL=https://dashscope-intl.aliyuncs.com/compatible-mode/v1`
 
 #### Kimi (Moonshot AI)
 
@@ -71,6 +88,7 @@ This project implements a context-aware AI agent with multiple tools (PDF parsin
 
 - Python 3.10+
 - API key for one of the supported providers:
+  - **Alibaba Cloud Model Studio / Bailian**: Get from [Model Studio](https://bailian.console.aliyun.com/)
   - **SiliconFlow**: Get from [SiliconFlow](https://siliconflow.cn)
   - **Doubao (ByteDance)**: Get from [Volcano Engine](https://www.volcengine.com/)
   - **Kimi (Moonshot)**: Get from [Moonshot Platform](https://platform.moonshot.cn/)
@@ -93,15 +111,27 @@ These samples are designed to showcase the agent's capabilities and the impact o
 #### 1. Installation
 
 ```bash
-# Clone the repository
+# Recommended from the repository root: use the shared Chapter 1 environment
+uv sync --locked --extra ch1
+
+# Activate it before changing directories:
+# macOS/Linux:
+source .venv/bin/activate
+# Windows PowerShell: .\.venv\Scripts\Activate.ps1
+# Windows cmd: .venv\Scripts\activate.bat
+
+# pip fallback when uv is not installed:
+# python -m pip install -e ".[ch1]"
+
+# Enter this experiment directory for the commands below
 cd chapter1/context
 
-# Install dependencies
-pip install -r requirements.txt
+# Single-project compatibility path, still supported during migration:
+# python -m pip install -r requirements.txt
 
 # Copy and configure environment
 cp env.example .env
-# Edit .env and add your API key (SILICONFLOW_API_KEY or ARK_API_KEY)
+# Edit .env and add one provider key (for example DASHSCOPE_API_KEY or ARK_API_KEY)
 ```
 
 #### 2. Configure Provider
@@ -114,6 +144,13 @@ python main.py  # Uses Doubao by default
 # For SiliconFlow (Qwen)
 export SILICONFLOW_API_KEY=your_key_here
 python main.py --provider siliconflow
+
+# For Qwen directly through Alibaba Cloud Model Studio / Bailian
+export DASHSCOPE_API_KEY=your_key_here
+python main.py --provider dashscope
+# --provider qwen and --provider bailian are equivalent aliases.
+# For an international-region key, also set:
+export DASHSCOPE_BASE_URL=https://dashscope-intl.aliyuncs.com/compatible-mode/v1
 
 # For Kimi (Moonshot)
 export MOONSHOT_API_KEY=your_key_here
@@ -138,9 +175,13 @@ python main.py                       # falls back to OpenRouter when ARK_API_KEY
 python main.py --provider openrouter # or use OpenRouter directly
 ```
 
-#### 3. Testing Kimi / DeepSeek Integration
+#### 3. Testing Qwen / Kimi / DeepSeek Integration
 
 ```bash
+# Run the ablation study directly on Alibaba Cloud Qwen
+export DASHSCOPE_API_KEY=your_key_here
+python main.py --provider dashscope --mode ablation
+
 # Quick test of Kimi K3 model
 export MOONSHOT_API_KEY=your_key_here
 python tests/manual/check_kimi.py
@@ -160,12 +201,6 @@ python tests/manual/check_deepseek.py
 python main.py --provider deepseek --mode interactive
 python main.py --provider deepseek --mode ablation
 ```
-
-After `python main.py --provider kimi --mode interactive` connects successfully,
-the program is already inside the model interaction prompt, for example
-`[KIMI]>`. At that point, type a task, `help`, `samples`, or `quit`; do not
-paste the startup command again. To return to the normal terminal prompt, type
-`quit` first.
 
 #### 4. Start Interactive Mode (Recommended)
 
@@ -219,8 +254,7 @@ python main.py --mode single \
 > for `MOONSHOT_API_KEY` (or legacy `KIMI_API_KEY`), `DEEPSEEK_API_KEY`, `SILICONFLOW_API_KEY`, or
 > `ZHIPU_API_KEY`, pass the matching `--provider kimi|deepseek|siliconflow|zhipu`.
 > Otherwise `python main.py --mode single` still looks for `ARK_API_KEY`, and
-> only falls back through `OPENROUTER_API_KEY` when that key is configured. See
-> [`main.py`](main.py#L1094-L1136).
+> only falls back through `OPENROUTER_API_KEY` when that key is configured.
 
 #### 6. Run Ablation Study
 
@@ -264,6 +298,13 @@ summary table:
 python run_experiment_1_1.py --provider kimi --model kimi-k3 --max-iterations 5
 ```
 
+The same evidence runner can use a Bailian key directly:
+
+```bash
+export DASHSCOPE_API_KEY=your_key_here
+python run_experiment_1_1.py --provider dashscope --model qwen3.7-plus --max-iterations 5
+```
+
 The accepted artifact is [validation/latest.json](validation/latest.json). All
 five request-shape contracts passed on the direct Moonshot API. The full arm
 produced the correct USD total and average; removing tool definitions produced
@@ -282,11 +323,17 @@ Observed results (these are not the expected-behavior labels below):
 | no tool definitions | 1 | 0 | no | no; the model explicitly declined to invent rates |
 | no tool results | 5 | 7 | yes | no; the model eventually reported that observations were hidden |
 
-Here `success` in an individual raw arm means that the API/agent loop returned
-a final response, not that the task or the manuscript hypothesis passed. The
-canonical behavioral booleans are under `analysis.manuscript_behavior_claims`;
-`all_manuscript_behavior_claims_observed` is false. This distinction prevents a
-graceful refusal in an ablated arm from being mislabeled as task success.
+In an individual raw arm, `completed` means that the API/agent loop returned a
+terminal response. It does not mean that the requested task was correct. The
+legacy `success` field is retained as an alias for `completed` so older result
+readers continue to work; new readers should use `completed` explicitly.
+`task_success` is the task-specific correctness result. For this experiment it
+is computed by the canonical numeric rubric, while the generic agent cannot
+infer correctness from arbitrary natural-language prompts. The canonical
+behavioral booleans are under `analysis.manuscript_behavior_claims`;
+`all_manuscript_behavior_claims_observed` is false. This separation prevents a
+graceful refusal or hallucinated tool markup in an ablated arm from being
+mislabeled as task success, without forcing any ablation outcome in advance.
 
 The ablation studies systematically remove context components to understand their importance.
 
@@ -345,7 +392,8 @@ Manual provider/API smoke scripts live under `tests/manual/` and require the cor
 
 #### Performance Metrics
 
-- **Success Rate**: Whether the task was completed correctly
+- **Terminal Response Rate**: Whether the agent returned a terminal response
+- **Task Success**: Correctness under the task-specific rubric (when one is available)
 - **Execution Time**: Total time to complete the task
 - **Iterations**: Number of agent-model interactions
 - **Tool Calls**: Number of external tool invocations
@@ -484,11 +532,11 @@ context/
 
 ### 概述
 
-本项目实现一个上下文感知 AI Agent，配备多种工具（PDF 解析、货币换算、计算器、代码解释器），并通过系统化的**消融实验**（Ablation Study）检验不同上下文组件对 Agent 行为与性能的影响。支持多家 LLM 提供商：SiliconFlow Qwen、字节跳动 Doubao、月之暗面 Kimi、DeepSeek。对应书中**实验 1-1 ★★：上下文的关键作用**。
+本项目实现一个上下文感知 AI Agent，配备多种工具（PDF 解析、货币换算、计算器、代码解释器），并通过系统化的**消融实验**（Ablation Study）检验不同上下文组件对 Agent 行为与性能的影响。支持通过阿里云百炼直连 Qwen，也支持 SiliconFlow Qwen、字节跳动 Doubao、月之暗面 Kimi、DeepSeek。对应书中**实验 1-1 ★★：上下文的关键作用**。
 
 ### 主要特性
 
-- **多提供商支持**：SiliconFlow（Qwen）、Doubao（字节）、Kimi（月之暗面）、DeepSeek
+- **多提供商支持**：阿里云百炼（Qwen 直连）、SiliconFlow（Qwen）、Doubao（字节）、Kimi（月之暗面）、DeepSeek
 - **多工具 Agent**：PDF 解析、货币换算、计算与 Python 代码执行
 - **上下文模式**：五种配置，用于消融对照
 - **交互与批处理**：单任务运行或完整测试套件
@@ -508,6 +556,13 @@ context/
 - **模型**：`Qwen/Qwen3.5-397B-A17B`（可自定义）
 - **API**：OpenAI 兼容
 - **适合**：复杂推理与细致分析
+
+#### 阿里云百炼（Qwen 直连）
+
+- **模型**：`qwen3.7-plus`（可通过 `--model` 自定义）
+- **API**：直连 DashScope 的 OpenAI 兼容接口，无需 SiliconFlow 账号
+- **提供商名称**：规范名称为 `dashscope`，也可使用别名 `qwen` 或 `bailian`
+- **区域说明**：API Key 与区域绑定。中国内地 Key 默认直连内地端点；国际站 Key 必须设置 `DASHSCOPE_BASE_URL=https://dashscope-intl.aliyuncs.com/compatible-mode/v1`
 
 #### Kimi（月之暗面）
 
@@ -544,6 +599,7 @@ context/
 
 - Python 3.10+
 - 任一支持提供商的 API Key：
+  - **阿里云百炼**：[百炼控制台](https://bailian.console.aliyun.com/)
   - **SiliconFlow**：[SiliconFlow](https://siliconflow.cn)
   - **Doubao（字节）**：[火山引擎](https://www.volcengine.com/)
   - **Kimi（月之暗面）**：[Moonshot Platform](https://platform.moonshot.cn/)
@@ -566,15 +622,27 @@ context/
 #### 1. 安装
 
 ```bash
-# Clone the repository
+# 推荐在仓库根目录使用统一的第 1 章环境
+uv sync --locked --extra ch1
+
+# 切换目录前先激活环境：
+# macOS/Linux：
+source .venv/bin/activate
+# Windows PowerShell：.\.venv\Scripts\Activate.ps1
+# Windows cmd：.venv\Scripts\activate.bat
+
+# 未安装 uv 时可用 pip 兜底：
+# python -m pip install -e ".[ch1]"
+
+# 进入本实验目录，后续命令都在这里运行
 cd chapter1/context
 
-# Install dependencies
-pip install -r requirements.txt
+# 迁移期间仍支持单项目兼容路径：
+# python -m pip install -r requirements.txt
 
-# Copy and configure environment
+# 复制并配置环境变量
 cp env.example .env
-# Edit .env and add your API key (SILICONFLOW_API_KEY or ARK_API_KEY)
+# 编辑 .env 并填入一个提供商的 API Key（例如 DASHSCOPE_API_KEY 或 ARK_API_KEY）
 ```
 
 #### 2. 配置提供商
@@ -587,6 +655,13 @@ python main.py  # Uses Doubao by default
 # For SiliconFlow (Qwen)
 export SILICONFLOW_API_KEY=your_key_here
 python main.py --provider siliconflow
+
+# 通过阿里云百炼直连 Qwen
+export DASHSCOPE_API_KEY=your_key_here
+python main.py --provider dashscope
+# --provider qwen 与 --provider bailian 是等价别名。
+# 如果使用国际站 Key，还需设置：
+export DASHSCOPE_BASE_URL=https://dashscope-intl.aliyuncs.com/compatible-mode/v1
 
 # For Kimi (Moonshot)
 export MOONSHOT_API_KEY=your_key_here
@@ -611,9 +686,13 @@ python main.py                       # falls back to OpenRouter when ARK_API_KEY
 python main.py --provider openrouter # or use OpenRouter directly
 ```
 
-#### 3. 测试 Kimi / DeepSeek 集成
+#### 3. 测试 Qwen / Kimi / DeepSeek 集成
 
 ```bash
+# 通过阿里云百炼 Qwen 直接运行消融实验
+export DASHSCOPE_API_KEY=your_key_here
+python main.py --provider dashscope --mode ablation
+
 # Quick test of Kimi K3 model
 export MOONSHOT_API_KEY=your_key_here
 python tests/manual/check_kimi.py
@@ -633,9 +712,6 @@ python tests/manual/check_deepseek.py
 python main.py --provider deepseek --mode interactive
 python main.py --provider deepseek --mode ablation
 ```
-
-> 执行 `python main.py --provider kimi --mode interactive` 并成功连接后，程序已经进入模型交互提示符，例如 `[KIMI]>`。
-> 这时应输入任务、`help`、`samples` 或 `quit`，不要再粘贴一次启动命令。如果要回到普通终端提示符，先输入 `quit` 退出交互模式。
 
 #### 4. 启动交互模式（推荐）
 
@@ -687,7 +763,7 @@ python main.py --mode single \
 > `SILICONFLOW_API_KEY` 或 `ZHIPU_API_KEY`，运行样例任务时必须显式传入对应的
 > `--provider kimi|deepseek|siliconflow|zhipu`。否则 `python main.py --mode single`
 > 仍会按默认 `doubao` 查找 `ARK_API_KEY`，只有配置了 `OPENROUTER_API_KEY` 时才会走
-> OpenRouter 兜底。代码依据见 [`main.py`](main.py#L1094-L1136)。
+> OpenRouter 兜底。
 
 #### 6. 运行消融实验
 
@@ -728,6 +804,13 @@ python main.py --mode ablation --ablation-modes full no_history --output my_abla
 
 ```bash
 python run_experiment_1_1.py --provider kimi --model kimi-k3 --max-iterations 5
+```
+
+同一证据运行器也支持直接使用百炼 Key：
+
+```bash
+export DASHSCOPE_API_KEY=your_key_here
+python run_experiment_1_1.py --provider dashscope --model qwen3.7-plus --max-iterations 5
 ```
 
 验收产物见 [validation/latest.json](validation/latest.json)。五组上下文契约全部通过；
@@ -792,7 +875,8 @@ python -m pytest tests
 
 #### 性能指标
 
-- **Success Rate**：任务是否正确完成
+- **Terminal Response Rate**：Agent 是否返回了终止响应
+- **Task Success**：在存在任务专用评分标准时，任务是否正确完成
 - **Execution Time**：完成任务总耗时
 - **Iterations**：Agent 与模型交互次数
 - **Tool Calls**：外部工具调用次数

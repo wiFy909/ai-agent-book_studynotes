@@ -8,6 +8,20 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+def _optional_int_env(name: str) -> Optional[int]:
+    """Read an optional integer without making module import configuration-fatal."""
+    raw_value = os.getenv(name)
+    if raw_value is None:
+        return None
+    cleaned = raw_value.strip()
+    if not cleaned or not cleaned.isascii() or not cleaned.isdecimal():
+        return None
+    try:
+        return int(cleaned)
+    except ValueError:
+        return None
+
+
 class Config:
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
     OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
@@ -15,14 +29,16 @@ class Config:
     OPENROUTER_BASE_URL = os.getenv(
         "OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"
     )
+    DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY", "")
+    DASHSCOPE_BASE_URL = os.getenv(
+        "DASHSCOPE_BASE_URL",
+        "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+    )
+    DASHSCOPE_MODEL = os.getenv("DASHSCOPE_MODEL", "qwen3.7-plus")
     BACKEND = os.getenv("BACKEND", "openai")
     MODEL_NAME = os.getenv("MODEL_NAME", "gpt-5.6-sol")
     DEFAULT_TEMPERATURE = 0.3  # legacy CLI compatibility; intentionally omitted
-    DEFAULT_MAX_TOKENS: Optional[int] = (
-        int(os.getenv("DEFAULT_MAX_TOKENS"))
-        if os.getenv("DEFAULT_MAX_TOKENS")
-        else None
-    )
+    DEFAULT_MAX_TOKENS: Optional[int] = _optional_int_env("DEFAULT_MAX_TOKENS")
     DEFAULT_TOOL_CHOICE = os.getenv("DEFAULT_TOOL_CHOICE", "auto")
     LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
     LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -37,13 +53,16 @@ class Config:
         cls, backend: Optional[str] = None, model: Optional[str] = None
     ) -> Tuple[str, str, str]:
         backend = backend or cls.BACKEND
-        model = model or cls.MODEL_NAME
         if backend == "openai":
+            model = model or cls.MODEL_NAME
             return cls.OPENAI_API_KEY, cls.OPENAI_BASE_URL, model.removeprefix("openai/")
         if backend == "openrouter":
+            model = model or cls.MODEL_NAME
             routed = model if model.startswith("openai/") else f"openai/{model}"
             return cls.OPENROUTER_API_KEY, cls.OPENROUTER_BASE_URL, routed
-        raise ValueError("backend must be openai or openrouter")
+        if backend == "dashscope":
+            return cls.DASHSCOPE_API_KEY, cls.DASHSCOPE_BASE_URL, model or cls.DASHSCOPE_MODEL
+        raise ValueError("backend must be openai, openrouter, or dashscope")
 
     @classmethod
     def validate(cls, backend: Optional[str] = None) -> bool:

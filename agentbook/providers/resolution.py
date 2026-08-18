@@ -12,8 +12,11 @@ talks to.
 
 from __future__ import annotations
 
+import os
+
 from .models import Backend, Provider
 from .openrouter import (
+    OPENROUTER_DEFAULT_MODEL,
     ZERO_COST_HINT,
     map_model_to_openrouter,
     openrouter_base_url,
@@ -63,7 +66,10 @@ def build_openrouter_backend(
         # reasons alone, so an unmapped id is sent as-is and rejected by name.
         # Substituting here would answer as a different vendor's model without
         # the reader ever learning theirs was unavailable.
-        model=map_model_to_openrouter(model),
+        model=map_model_to_openrouter(
+            (model or "").strip() or os.getenv("OPENROUTER_MODEL", "").strip() or OPENROUTER_DEFAULT_MODEL,
+            substitute_unknown=not (model or "").strip(),
+        ),
         provider=provider,
         using_openrouter=True,
     )
@@ -136,7 +142,17 @@ def resolve_backend(
             neither its own variables nor ``OPENROUTER_API_KEY`` are set.
     """
     spec = lookup(provider)
-    resolved_model = model or spec.default_model
+    model_clean = (model or "").strip()
+    if model_clean:
+        resolved_model = model_clean
+    elif spec.name == _OPENROUTER:
+        # The OpenRouter default honours OPENROUTER_MODEL — the env var this
+        # package documents (see the module docstring / ZERO_COST_HINT) as the
+        # ':free' zero-cost selector. Without this, the documented free recipe
+        # silently resolves the paid OPENROUTER_DEFAULT_MODEL instead.
+        resolved_model = os.getenv("OPENROUTER_MODEL", "").strip() or spec.default_model
+    else:
+        resolved_model = spec.default_model
     key = (api_key or "").strip() or spec.api_key()
 
     # Only OpenRouter's own credential can authenticate against OpenRouter. An
